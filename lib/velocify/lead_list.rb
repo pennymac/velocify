@@ -15,7 +15,7 @@ module Velocify
     end
 
     def render
-      relative_path = File.join 'xml', 'leads.xml.erb'
+      relative_path = File.join '..', '..', 'templates', 'add_leads.xml.erb'
       current_dir = File.dirname(__FILE__)
       path = File.expand_path relative_path, current_dir
       template = File.read(path)

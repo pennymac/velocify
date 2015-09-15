@@ -1,0 +1,23 @@
+<!-- sample XML payload for AddLeads webmethod -->
+<Leads>
+    <% @leads.each do |lead| %>
+	<Lead>
+	    <% if lead.status_id? %>
+		<Status StatusId="<%= lead.status_id %>"/>
+	    <% end %>
+	    <% if lead.agent_id? %>
+		<Agent AgentId="<%= lead.agent_id %>"/>
+	    <% end %>
+	    <% if lead.campaign_id? %>
+		<Campaign CampaignId="<%= lead.campaign_id %>"/>
+	    <% end %>
+	    <% unless lead.fields.empty? %>
+		<Fields>
+		    <% lead.fields.each do |field| %>
+			<Field FieldId="<%= field[:id] %>" Value="<%= field[:value] %>"/>
+		    <% end %>
+		</Fields>
+	    <% end %>
+	</Lead>
+    <% end %>
+</Leads>

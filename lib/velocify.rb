@@ -1,4 +1,7 @@
 require "savon"
+require "dotenv"
+
+Dotenv.load
 
 require "velocify/version"
 require "velocify/model"
@@ -10,6 +13,7 @@ require "velocify/status"
 
 require "velocify/response_reader"
 require "velocify/lead_list"
+
 
 module Velocify
 end
