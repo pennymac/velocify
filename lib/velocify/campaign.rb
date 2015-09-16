@@ -4,10 +4,10 @@ module Velocify
 
     operations :get_campaigns
 
-    def self.find_all
+    def self.find_all destruct: false
       verify_credentials!
 
-      request do
+      request(destruct: destruct) do
         response = get_campaigns(message: @credentials)
         response.body[:get_campaigns_response][:get_campaigns_result]
       end

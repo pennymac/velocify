@@ -31,13 +31,26 @@ module Velocify
       !@credentials[:username].empty? && !@credentials[:password].empty?
     end
     
-    def request &block
+    def request destruct: false, &block
       begin
-        yield block
+        if destruct
+          result = yield block
+          [true, result]
+        else
+          yield block
+        end
       rescue Savon::SOAPFault => ex
-        { message: ex.message }
+        if destruct
+          [false, { message: ex.message }]
+        else
+          { message: ex.message }
+        end
       rescue Net::ReadTimeout => ex
-        { message: ex.message }
+        if destruct
+          [false, { message: ex.message }]
+        else
+          { message: ex.message }
+        end
       end
     end
   end
