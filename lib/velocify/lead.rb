@@ -7,6 +7,7 @@ module Velocify
       :get_last_created_lead,
       :get_leads_by_email,
       :get_last_modified_lead,
+      :get_leads_by_phone,
       :modify_lead_field,
       :modify_lead_status,
       :add_leads
@@ -72,6 +73,20 @@ module Velocify
         request do
           response = get_leads_by_email(message: authenticated_message({ email: email }))
           response.body[:get_leads_by_email_response][:get_leads_by_email_result]
+        end
+      end
+
+      # Retrieves a lead using a phone numebr
+      #
+      # @param phone [String] The phone number used to search for a lead
+      # @return [Hash] The leads having the matching phone number
+      #
+      def find_by_phone phone
+        verify_credentials!
+        
+        request do
+          response = get_leads_by_phone(message: authenticated_message({ phone: phone.gsub(/[()\- ]/, '') }))
+          response.body[:get_leads_by_phone_response][:get_leads_by_phone_result]
         end
       end
 
