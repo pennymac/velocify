@@ -26,7 +26,43 @@ Before getting started, you must export two environment variables: ```VELOCIFY_U
 require 'velocify'
 
 statuses = Velocify::Status.find_all
-dormant_id = Velocify::ResponseReader.read(kind: :status, statuses).find_id_by_title 'Dormant'
+# => {statuses=>status=>[{...}, ...]}
+
+dormant_id = Velocify::ResponseReader.read(kind: :status, response: statuses).find_id_by_title 'Dormant'
+# => 31
+
+statuses_with_name = Velocify::ResponseReader.read(kind: :status, response: statuses).search_by_title 'Name'
+# => [{...}, ...]
+
+leads = Velocify::Lead.find_last_created
+# => {leads=>lead=>{...}}
+
+# There's also support for destructuring
+
+success, leads = Velocify::Lead.find_all from: '2000-01-01T00:00:00', to: '2000-02-01T00:00:00', destruct: true
+# => [true, {leads=>lead=>[{...}]}]
+success
+# => true
+payload
+# => {leads=>lead=>[{ ... }]}
+
+# Pushing leads to Velocify
+campaign_id = Velocify::ResponseReader.read(kind: :campaign, response: Velocify::Campaign.find_all).find_id_by_title 'Test Campaign'
+status_id = Velocify::ResponseReader.read(kind: :status, response: Velocify::Status.find_all).find_id_by_title 'Active'
+last_name_id = Velocify::ResponseReader.read(kind: :field, response: Velocify::Field.find_all).find_id_by_title 'Last Name'
+first_name_id = Velocify::ResponseReader.read(kind: :field, response: Velocify::Field.find_all).find_id_by_title 'First Name'
+
+lead = Lead.new
+lead.campaign_id = campaign_id
+lead.status_id = status_id
+lead.add_field id: first_name_id, value: "Joe"
+lead.add_field id: last_name_id, value: "Bo"
+
+list = Velocify::LeadList.new
+list.add_lead lead
+xml_payload = list.render # Renders xml output
+
+Velocify::Lead.add leads: xml_payload
 ```
 
 ## Development
