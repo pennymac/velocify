@@ -36,10 +36,10 @@ module Velocify
       # @param leads [String] The string representation of the XML document
       #                       containing the new leads
       #
-      def add leads:
+      def add leads:, destruct: false
         verify_credentials!
 
-        request do
+        request(destruct: destruct) do
           response = add_leads(message: authenticated_message({ leads: leads }))
           response.body[:add_leads_response][:add_leads_result]
         end
@@ -51,12 +51,12 @@ module Velocify
       # @param to [String] The end date
       # @return [Hash] The leads between the `from:` and `to:` dates
       #
-      def find_all from:, to:
+      def find_all from:, to:, destruct: false
         verify_credentials!
 
         m = { from: from, to: to }
 
-        request do
+        request(destruct: destruct) do
           response = get_leads(message: authenticated_message(m))
           response.body
         end
@@ -67,10 +67,10 @@ module Velocify
       # @param email [String] The email address used to search for a lead
       # @return [Hash] The leads having the matching email address
       #
-      def find_by_email email
+      def find_by_email email, destruct: false
         verify_credentials!
 
-        request do
+        request(destruct: destruct) do
           response = get_leads_by_email(message: authenticated_message({ email: email }))
           response.body[:get_leads_by_email_response][:get_leads_by_email_result]
         end
@@ -81,10 +81,10 @@ module Velocify
       # @param phone [String] The phone number used to search for a lead
       # @return [Hash] The leads having the matching phone number
       #
-      def find_by_phone phone
+      def find_by_phone phone, destruct: false
         verify_credentials!
         
-        request do
+        request(destruct: destruct) do
           response = get_leads_by_phone(message: authenticated_message({ phone: phone.gsub(/[()\- ]/, '') }))
           response.body[:get_leads_by_phone_response][:get_leads_by_phone_result]
         end
@@ -95,28 +95,28 @@ module Velocify
       # @param id [String] the id of the lead
       # @return [Hash] The lead with the matching id
       #
-      def find_by_id id
+      def find_by_id id, destruct: false
         verify_credentials!
         
-        request do
+        request(destruct: destruct) do
           response = get_lead(message: authenticated_message({ lead_id: id }))
           response.body[:get_lead_response][:get_lead_result]
         end
       end
       
-      def find_last_created
+      def find_last_created destruct: false
         verify_credentials!
         
-        request do
+        request(destruct: destruct) do
           response = get_last_created_lead(message: authenticated_message({}))
           response.body[:get_last_created_lead_response][:get_last_created_lead_result]
         end
       end
 
-      def find_last_modified
+      def find_last_modified destruct: false
         verify_credentials!
         
-        request do
+        request(destruct: destruct) do
           response = get_last_modified_lead(message: authenticated_message({}))
           response.body[:get_last_modified_lead_response][:get_last_modified_lead_result]
         end
@@ -132,10 +132,10 @@ module Velocify
       # @param status_id [String] The id of the status
       # @return [Hash] The response containing the updated lead
       #
-      def update_status lead_id:, status_id:
+      def update_status lead_id:, status_id:, destruct: false
         verify_credentials!
         
-        request do
+        request(destruct: destruct) do
           response = modify_lead_status(message: authenticated_message({
             lead_id: lead_id,
             status_id: status_id
@@ -151,10 +151,10 @@ module Velocify
       # @param new_value [String] The new value of the field
       # @return [Hash] The response containing the updated lead
       #
-      def update_field lead_id:, field_id:, new_value:
+      def update_field lead_id:, field_id:, new_value:, destruct: false
         verify_credentials!
         
-        request do
+        request(destruct: destruct) do
           response = modify_lead_field(message: authenticated_message({
             field_id: field_id,
             lead_id: lead_id,

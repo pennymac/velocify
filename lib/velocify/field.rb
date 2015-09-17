@@ -6,10 +6,10 @@ module Velocify
 
     # @return [Hash] a list of fields
     #
-    def self.find_all
+    def self.find_all destruct: false
       verify_credentials!
       
-      request do
+      request(destruct: destruct) do
         response = get_fields(message: @credentials)
         response.body[:get_fields_response][:get_fields_result]
       end
