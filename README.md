@@ -1,5 +1,6 @@
 # Velocify
 [![Gem Version](https://badge.fury.io/rb/velocify.svg)](http://badge.fury.io/rb/velocify)
+[![Code Climate](https://codeclimate.com/github/pennymac/velocify/badges/gpa.svg)](https://codeclimate.com/github/pennymac/velocify)
 
 ## Installation
 
