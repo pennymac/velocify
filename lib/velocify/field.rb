@@ -2,16 +2,22 @@ module Velocify
   class Field
     include Model
 
-    operations :get_fields
-
     # @return [Hash] a list of fields
     #
-    def self.find_all destruct: false
+    def self.find_all destruct: false, return_array: false
       verify_credentials!
       
-      request(destruct: destruct) do
-        response = get_fields(message: @credentials)
-        response.body[:get_fields_response][:get_fields_result]
+      request do
+        enable_destructuring destruct
+        operation :get_fields
+        authenticate true
+        transform do |resp|
+          if return_array
+            arrayify resp[:fields][:field]
+          else
+            resp
+          end
+        end
       end
     end
   end

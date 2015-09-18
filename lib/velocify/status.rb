@@ -2,14 +2,20 @@ module Velocify
   class Status
     include Model
 
-    operations :get_statuses
-
-    def self.find_all destruct: false
+    def self.find_all destruct: false, return_array: false
       verify_credentials!
 
-      request(destruct: destruct) do
-        response = get_statuses(message: authenticated_message({}))
-        response.body[:get_statuses_response][:get_statuses_result]
+      request do
+        enable_destructuring destruct
+        operation :get_statuses
+        authenticate true
+        transform do |resp|
+          if return_array
+            arrayify resp[:statuses][:status]
+          else
+            resp
+          end
+        end
       end
     end
   end

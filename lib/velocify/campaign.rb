@@ -2,14 +2,20 @@ module Velocify
   class Campaign
     include Model
 
-    operations :get_campaigns
-
-    def self.find_all destruct: false
+    def self.find_all destruct: false, return_array: false
       verify_credentials!
 
-      request(destruct: destruct) do
-        response = get_campaigns(message: @credentials)
-        response.body[:get_campaigns_response][:get_campaigns_result]
+      request do
+        enable_destructuring destruct
+        operation :get_campaigns
+        authenticate true
+        transform do |resp|
+          if return_array
+            arrayify resp[:campaigns][:campaign]
+          else
+            resp
+          end
+        end
       end
     end
   end

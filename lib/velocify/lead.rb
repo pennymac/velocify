@@ -2,16 +2,6 @@ module Velocify
   class Lead
     include Model
 
-    operations :get_lead,
-      :get_leads,
-      :get_last_created_lead,
-      :get_leads_by_email,
-      :get_last_modified_lead,
-      :get_leads_by_phone,
-      :modify_lead_field,
-      :modify_lead_status,
-      :add_leads
-
     attr :fields
     attr_accessor :campaign_id, :agent_id, :status_id
 
@@ -36,12 +26,20 @@ module Velocify
       # @param leads [String] The string representation of the XML document
       #                       containing the new leads
       #
-      def add leads:, destruct: false
+      def add leads:, destruct: false, return_array: false
         verify_credentials!
 
-        request(destruct: destruct) do
-          response = add_leads(message: authenticated_message({ leads: leads }))
-          response.body[:add_leads_response][:add_leads_result]
+        request do
+          enable_destructuring destruct
+          operation :add_leads_response
+          message leads: leads
+          transform do |resp|
+            if return_array
+              arrayify resp[:leads][:lead]
+            else
+              resp
+            end
+          end
         end
       end
       
@@ -51,14 +49,21 @@ module Velocify
       # @param to [String] The end date
       # @return [Hash] The leads between the `from:` and `to:` dates
       #
-      def find_all from:, to:, destruct: false
+      def find_all from:, to:, destruct: false, return_array: false
         verify_credentials!
 
-        m = { from: from, to: to }
-
-        request(destruct: destruct) do
-          response = get_leads(message: authenticated_message(m))
-          response.body
+        request do
+          enable_destructuring destruct
+          operation :get_leads
+          message from: from, to: to
+          authenticate true
+          transform do |resp|
+            if return_array
+              arrayify resp[:leads][:lead]
+            else
+              resp
+            end
+          end
         end
       end
 
@@ -67,12 +72,21 @@ module Velocify
       # @param email [String] The email address used to search for a lead
       # @return [Hash] The leads having the matching email address
       #
-      def find_by_email email, destruct: false
+      def find_by_email email, destruct: false, return_array: false
         verify_credentials!
 
-        request(destruct: destruct) do
-          response = get_leads_by_email(message: authenticated_message({ email: email }))
-          response.body[:get_leads_by_email_response][:get_leads_by_email_result]
+        request do
+          enable_destructuring destruct
+          operation :get_leads_by_email
+          authenticate true
+          message email: email
+          transform do |resp|
+            if return_array
+              arrayify resp[:leads][:lead]
+            else
+              resp
+            end
+          end
         end
       end
 
@@ -81,12 +95,21 @@ module Velocify
       # @param phone [String] The phone number used to search for a lead
       # @return [Hash] The leads having the matching phone number
       #
-      def find_by_phone phone, destruct: false
+      def find_by_phone phone, destruct: false, return_array: false
         verify_credentials!
-        
-        request(destruct: destruct) do
-          response = get_leads_by_phone(message: authenticated_message({ phone: phone.gsub(/[()\- ]/, '') }))
-          response.body[:get_leads_by_phone_response][:get_leads_by_phone_result]
+
+        request do
+          enable_destructuring destruct
+          operation :get_leads_by_phone
+          message phone: phone.gsub(/[()\- ]/, '')
+          authenticate true
+          transform do |resp|
+            if return_array
+              arrayify resp[:leads][:lead]
+            else
+              resp
+            end
+          end
         end
       end
 
@@ -95,30 +118,73 @@ module Velocify
       # @param id [String] the id of the lead
       # @return [Hash] The lead with the matching id
       #
-      def find_by_id id, destruct: false
+      def find_by_id id, destruct: false, return_array: false
         verify_credentials!
         
-        request(destruct: destruct) do
-          response = get_lead(message: authenticated_message({ lead_id: id }))
-          response.body[:get_lead_response][:get_lead_result]
+        request do
+          enable_destructuring destruct
+          operation :get_lead
+          authenticate true
+          message lead_id: id
+          transform do |resp|
+            if return_array
+              arrayify resp[:leads][:lead]
+            else
+              resp
+            end
+          end
         end
       end
       
-      def find_last_created destruct: false
+      def find_last_created destruct: false, return_array: false
         verify_credentials!
         
-        request(destruct: destruct) do
-          response = get_last_created_lead(message: authenticated_message({}))
-          response.body[:get_last_created_lead_response][:get_last_created_lead_result]
+        request do
+          enable_destructuring destruct
+          operation :get_last_created_lead
+          authenticate true
+          transform do |resp|
+            if return_array
+              arrayify resp[:leads][:lead]
+            else
+              resp
+            end
+          end
         end
       end
 
-      def find_last_modified destruct: false
+      def find_last_modified destruct: false, return_array: false
         verify_credentials!
         
-        request(destruct: destruct) do
-          response = get_last_modified_lead(message: authenticated_message({}))
-          response.body[:get_last_modified_lead_response][:get_last_modified_lead_result]
+        request do
+          enable_destructuring destruct
+          operation :get_last_modified_lead
+          authenticate true
+          transform do |resp|
+            if return_array
+              arrayify resp[:leads][:lead]
+            else
+              resp
+            end
+          end
+        end
+      end
+
+      def remove id:, destruct: false, return_array: false
+        verify_credentials!
+
+        request do
+          enable_destructuring destruct
+          operation :remove_lead
+          authenticate true
+          message lead_id: id
+          transform do |resp|
+            if return_array
+              arrayify resp[:response][:removals] # also [:lead] ?
+            else
+              resp
+            end
+          end
         end
       end
 
@@ -132,15 +198,21 @@ module Velocify
       # @param status_id [String] The id of the status
       # @return [Hash] The response containing the updated lead
       #
-      def update_status lead_id:, status_id:, destruct: false
+      def update_status lead_id:, status_id:, destruct: false, return_array: false
         verify_credentials!
         
-        request(destruct: destruct) do
-          response = modify_lead_status(message: authenticated_message({
-            lead_id: lead_id,
-            status_id: status_id
-          }))
-          response.body[:modify_lead_status_response][:modify_lead_status_result]
+        request do
+          enable_destructuring destruct
+          operation :modify_lead_status
+          authenticate true
+          message lead_id: lead_id, status_id: status_id
+          transform do |resp|
+            if return_array
+              arrayify resp[:leads][:lead]
+            else
+              resp
+            end
+          end
         end
       end
 
@@ -151,18 +223,26 @@ module Velocify
       # @param new_value [String] The new value of the field
       # @return [Hash] The response containing the updated lead
       #
-      def update_field lead_id:, field_id:, new_value:, destruct: false
+      def update_field lead_id:, field_id:, new_value:, destruct: false, return_array: false
         verify_credentials!
-        
-        request(destruct: destruct) do
-          response = modify_lead_field(message: authenticated_message({
-            field_id: field_id,
-            lead_id: lead_id,
-            new_value: new_value
-          }))
-          response.body[:modify_lead_field_response][:modify_lead_field_result]
+      
+        request do
+          enable_destructuring destruct
+          operation :modify_lead_field
+          authenticate true
+          message field_id: field_id, lead_id: lead_id, new_value: new_value
+          transform do |resp|
+            if return_array
+              arrayify resp[:leads][:lead]
+            else
+              resp
+            end
+          end
         end
       end
+
+      alias_method :last_created, :find_last_created
+      alias_method :last_modified, :find_last_modified
     end
   end
 end
