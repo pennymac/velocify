@@ -21,6 +21,7 @@ Or install it yourself as:
 ## Usage
 
 Before getting started, you must export two environment variables: ```VELOCIFY_USERNAME``` and ```VELOCIFY_PASSWORD```.
+This gem uses Dotenv, so you can add these variables to your ```.env``` file in the root folder of your project.
 
 ``` ruby
 require 'velocify'
@@ -46,6 +47,11 @@ success
 payload
 # => {leads=>lead=>[{ ... }]}
 
+# You can even have your results returned as an array
+
+success, leads = Velocify::Lead.find_all from: '2000-01-01T00:00:00', to: '2000-02-01T00:00:00', destruct: true, return_array: true
+# => [true, [{...}, ... }]
+
 # Pushing leads to Velocify
 campaign_id = Velocify::ResponseReader.read(kind: :campaign, response: Velocify::Campaign.find_all).find_id_by_title 'Test Campaign'
 status_id = Velocify::ResponseReader.read(kind: :status, response: Velocify::Status.find_all).find_id_by_title 'Active'
@@ -64,6 +70,10 @@ xml_payload = list.render # Renders xml output
 
 Velocify::Lead.add leads: xml_payload
 ```
+
+## Changes
+
+For a list of changes in each release, read the CHANGELOG.
 
 ## Development
 
