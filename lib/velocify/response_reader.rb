@@ -12,8 +12,13 @@ module Velocify
       def read kind:, response:
         singular_key = kind.to_s
         plural_key = singular_key.pluralize
-        fields = response[plural_key.to_sym][singular_key.to_sym]
-        ResponseReader.new kind: kind, hash: fields
+        fields = response
+        
+        if response.instance_of? Hash
+          fields = response[plural_key.to_sym][singular_key.to_sym]
+        end
+          
+        ResponseReader.new kind: kind, elements: fields
       end
     end
 
@@ -23,40 +28,45 @@ module Velocify
     # @return [String] the id of the `kind` that matches the title you searched for
     #
     def find_id_by_title title
-      key = @hash.select { |f|
-        f["@#{kind}_title".to_sym] == title
-      }.pop
+      element = select_one_by_title title
+      element["@#{kind}_id".to_sym] if element
+    end
 
-      key["@#{kind}_id".to_sym] if key
+    def find_value_by_title title
+      element = select_one_by_title title
+      element["@value".to_sym] if element
     end
 
     def search_by_title title
-      key = @hash.select { |k|
-        k["@#{kind}_title".to_sym] =~ /#{title}/
+      element = @elements.select { |el|
+        el["@#{kind}_title".to_sym] =~ /#{title}/
       }
 
-      key if key
+      element if element
     end
 
     def find_by_title title
-      key = @hash.select { |k|
-        k["@#{kind}_title".to_sym] == title
-      }.pop
-
-      key if key
+      element = select_one_by_title title
+      element if element
     end
 
     # @return [String] a list of all the titles
     def all_titles
-      @hash.map { |k| k["@#{kind}_title".to_sym] }
+      @elements.map { |el| el["@#{kind}_title".to_sym] }
     end
 
     private
 
     attr :kind, :hash
     
-    def initialize kind:, hash:
-      @kind, @hash = kind.to_s, hash
+    def initialize kind:, elements:
+      @kind, @elements = kind.to_s, elements
+    end
+
+    def select_one_by_title title
+      @elements.select { |el|
+        el["@#{kind}_title".to_sym] == title
+      }.pop
     end
   end
 end
