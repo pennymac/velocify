@@ -2,15 +2,21 @@ module Velocify
   class FieldType
     include Model
 
-    operations :get_field_types
-    
     # @return [Hash] a list of fields
-    def self.find_all destruct: false
+    def self.find_all destruct: false, return_array: false
       verify_credentials!
       
-      request(destruct: destruct) do
-        response = get_field_types(message: authenticated_message({}))
-        response.body[:get_field_types_response][:get_field_types_result]
+      request do
+        enable_destructuring destruct
+        operation :get_field_types
+        authenticate true
+        transform do |resp|
+          if return_array
+            arrayify resp[:field_types][:field_type]
+          else
+            resp
+          end
+        end
       end
     end
   end
