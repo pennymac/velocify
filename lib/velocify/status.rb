@@ -6,9 +6,9 @@ module Velocify
       verify_credentials!
 
       request do
-        enable_destructuring destruct
+        destruct_response? destruct
         operation :get_statuses
-        authenticate true
+        authenticate? true
         transform do |resp|
           if return_array
             arrayify resp[:statuses][:status]

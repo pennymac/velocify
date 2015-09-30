@@ -1,17 +1,19 @@
 module Velocify
-  class Campaign
+  class Agent
     include Model
 
+    # Retrieve the entire list of agents
+    #
     def self.find_all destruct: false, return_array: false
       verify_credentials!
 
       request do
         destruct_response? destruct
-        operation :get_campaigns
+        operation :get_agents
         authenticate? true
         transform do |resp|
           if return_array
-            arrayify resp[:campaigns][:campaign]
+            arrayify resp[:agents][:agent]
           else
             resp
           end
