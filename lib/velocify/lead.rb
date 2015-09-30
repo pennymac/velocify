@@ -30,9 +30,10 @@ module Velocify
         verify_credentials!
 
         request do
-          enable_destructuring destruct
-          operation :add_leads_response
-          message leads: leads
+          destruct_response? destruct
+          operation :add_leads
+          authenticate? true
+          xml AddLeadsPayload.new(leads)
           transform do |resp|
             if return_array
               arrayify resp[:leads][:lead]
@@ -53,10 +54,10 @@ module Velocify
         verify_credentials!
 
         request do
-          enable_destructuring destruct
+          destruct_response? destruct
           operation :get_leads
           message from: from, to: to
-          authenticate true
+          authenticate? true
           transform do |resp|
             if return_array
               arrayify resp[:leads][:lead]
@@ -76,9 +77,9 @@ module Velocify
         verify_credentials!
 
         request do
-          enable_destructuring destruct
+          destruct_response? destruct
           operation :get_leads_by_email
-          authenticate true
+          authenticate? true
           message email: email
           transform do |resp|
             if return_array
@@ -99,10 +100,10 @@ module Velocify
         verify_credentials!
 
         request do
-          enable_destructuring destruct
+          destruct_response? destruct
           operation :get_leads_by_phone
           message phone: phone.gsub(/[()\- ]/, '')
-          authenticate true
+          authenticate? true
           transform do |resp|
             if return_array
               arrayify resp[:leads][:lead]
@@ -122,9 +123,9 @@ module Velocify
         verify_credentials!
         
         request do
-          enable_destructuring destruct
+          destruct_response? destruct
           operation :get_lead
-          authenticate true
+          authenticate? true
           message lead_id: id
           transform do |resp|
             if return_array
@@ -140,9 +141,9 @@ module Velocify
         verify_credentials!
         
         request do
-          enable_destructuring destruct
+          destruct_response? destruct
           operation :get_last_created_lead
-          authenticate true
+          authenticate? true
           transform do |resp|
             if return_array
               arrayify resp[:leads][:lead]
@@ -157,9 +158,9 @@ module Velocify
         verify_credentials!
         
         request do
-          enable_destructuring destruct
+          destruct_response? destruct
           operation :get_last_modified_lead
-          authenticate true
+          authenticate? true
           transform do |resp|
             if return_array
               arrayify resp[:leads][:lead]
@@ -174,9 +175,9 @@ module Velocify
         verify_credentials!
 
         request do
-          enable_destructuring destruct
+          destruct_response? destruct
           operation :remove_lead
-          authenticate true
+          authenticate? true
           message lead_id: id
           transform do |resp|
             if return_array
@@ -202,9 +203,9 @@ module Velocify
         verify_credentials!
         
         request do
-          enable_destructuring destruct
+          destruct_response? destruct
           operation :modify_lead_status
-          authenticate true
+          authenticate? true
           message lead_id: lead_id, status_id: status_id
           transform do |resp|
             if return_array
@@ -227,9 +228,9 @@ module Velocify
         verify_credentials!
       
         request do
-          enable_destructuring destruct
+          destruct_response? destruct
           operation :modify_lead_field
-          authenticate true
+          authenticate? true
           message field_id: field_id, lead_id: lead_id, new_value: new_value
           transform do |resp|
             if return_array
