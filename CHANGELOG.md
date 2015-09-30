@@ -1,3 +1,24 @@
+# Changes in 0.1.4
+
+* ```Velocify::Lead.add``` now works:
+
+``` ruby
+lead = Velocify::Lead.new
+lead.status_id = 13
+lead.campaign_id = 35
+lead.agent_id = 89
+lead.add_field id: 2, value: "First"
+lead.add_field id: 3, value: "Lead"
+
+Velocify::Lead.add leads: [lead]
+```
+
+* Support for retrieving agents
+
+``` ruby
+agents = Velocify::Agent.find_all return_array: true
+```
+
 # Changes in 0.1.3
 
 * All model classes now support the optional keyword argument ```return_array:``` if you want to receive
