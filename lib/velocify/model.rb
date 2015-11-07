@@ -55,10 +55,6 @@ module Velocify
         @payload.authenticate username: username, password: password
       end
 
-      def transform= transform
-        @transform = transform
-      end
-
       def payload
         @payload.render
       end
@@ -69,42 +65,69 @@ module Velocify
     
     class RequestBuilder
       include RequestHelpers
+
+      attr_reader :settings
       
-      def initialize
+      def initialize request=nil
+        @request = request
+        @settings = {
+          requires_auth: false,
+          destruct: false,
+          transform: ->(x) { x },
+          xml: nil,
+          message: {},
+          operation: nil
+        }
         @destruct = false
       end
 
       def destruct_response? is_on
+        @settings[:destruct] = is_on
         @destruct = is_on
       end
 
       def authenticate? is_on
+        @settings[:requires_auth] = is_on
         @authenticate = is_on
       end
 
       def transform &block
+        @settings[:transform] = block
         @transform = block
       end
 
       def operation op
+        @settings[:operation] = op.to_sym
         @operation = op.to_sym
       end
 
       def xml xml
+        @settings[:xml] = xml
         @xml = xml
       end
 
       def message msg
+        @settings[:message] = msg
         @message = msg
       end
 
       def build
-        Request.new.tap do |req|
-          req.payload = @xml || MessagePayload.new(@message)
-          req.requires_auth = @authenticate
-          req.transform = @transform || -> (resp) { resp }
-          req.operation = @operation
-          req.destruct_response = @destruct          
+        if @request
+          @request.tap do |req|
+            req.payload = @xml || MessagePayload.new(@message)
+            req.requires_auth = @authenticate
+            req.transform = @transform || -> (resp) { resp }
+            req.operation = @operation
+            req.destruct_response = @destruct          
+          end
+        else
+          Request.new.tap do |req|
+            req.payload = @xml || MessagePayload.new(@message)
+            req.requires_auth = @authenticate
+            req.transform = @transform || -> (resp) { resp }
+            req.operation = @operation
+            req.destruct_response = @destruct          
+          end
         end
       end
     end

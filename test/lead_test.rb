@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class VelocifyLeadTest < Minitest::Test
+class LeadTest < Minitest::Test
   def setup
     @subject = Velocify::Lead.new
   end
@@ -23,7 +23,7 @@ class VelocifyLeadTest < Minitest::Test
 
     @subject.add_field id: field_id, value: field_value
 
-    assert @subject.fields, [{ id: field_id, value: field_value }]
+    assert_equal @subject.fields, [{ id: field_id, value: field_value }], "The lead object must return the id and value of the added field"
   end
 
   def test_add_more_than_one_field
@@ -35,6 +35,6 @@ class VelocifyLeadTest < Minitest::Test
     @subject.add_field id: field1_id, value: field1_value
     @subject.add_field id: field2_id, value: field2_value
 
-    assert @subject.fields, [{ id: field1_id, value: field1_value }, { id: field2_id, value: field2_value }]
+    assert_equal @subject.fields, [{ id: field1_id, value: field1_value }, { id: field2_id, value: field2_value }], "The lead object must return the id and value of the added fields"
   end
 end
