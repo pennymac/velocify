@@ -2,7 +2,7 @@ language: ruby
 rvm:
   - 2.2.3
 before_install: gem install bundler -v 1.10.6
-script: ruby -Ilib:test test/velocify_test.rb
+script: bundle exec rake test
 addons:
   code_climate:
     repo_token: 390e6c3bd4187c953584a19a731574270e8fc509e975c682e4cd8f2bace18bee

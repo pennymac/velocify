@@ -11,3 +11,4 @@
 .env
 *.gem
 .ruby-version
+*.swp
