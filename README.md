@@ -1,7 +1,7 @@
 # Velocify
 [![Gem Version](https://badge.fury.io/rb/velocify.svg)](http://badge.fury.io/rb/velocify)
 [![Code Climate](https://codeclimate.com/github/pennymac/velocify/badges/gpa.svg)](https://codeclimate.com/github/pennymac/velocify)
-[![Build Status](https://travis-ci.org/pennymac/velocify.svg?branch=master)](https://travis-ci.org/pennymac/velocify)
+[![Build Status](https://travis-ci.org/pennymac/velocify.svg)](https://travis-ci.org/pennymac/velocify)
 [![Test Coverage](https://codeclimate.com/github/pennymac/velocify/badges/coverage.svg)](https://codeclimate.com/github/pennymac/velocify/coverage)
 
 ## Installation
