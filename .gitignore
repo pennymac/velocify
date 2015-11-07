@@ -10,3 +10,4 @@
 *~
 .env
 *.gem
+.ruby-version
