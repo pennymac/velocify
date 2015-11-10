@@ -60,17 +60,13 @@ status_id = Velocify::ResponseReader.read(kind: :status, response: Velocify::Sta
 last_name_id = Velocify::ResponseReader.read(kind: :field, response: Velocify::Field.find_all).find_id_by_title 'Last Name'
 first_name_id = Velocify::ResponseReader.read(kind: :field, response: Velocify::Field.find_all).find_id_by_title 'First Name'
 
-lead = Lead.new
+lead = Velocify::Lead.new
 lead.campaign_id = campaign_id
 lead.status_id = status_id
 lead.add_field id: first_name_id, value: "Joe"
 lead.add_field id: last_name_id, value: "Bo"
 
-list = Velocify::LeadList.new
-list.add_lead lead
-xml_payload = list.render # Renders xml output
-
-Velocify::Lead.add leads: xml_payload
+Velocify::Lead.add leads: [ lead ]
 ```
 
 ## Changes
