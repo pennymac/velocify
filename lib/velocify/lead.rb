@@ -36,7 +36,7 @@ module Velocify
           xml AddLeadsPayload.new(leads)
           transform do |resp|
             if return_array
-              arrayify resp[:leads][:lead]
+              arrayify resp[:response][:additions][:lead]
             else
               resp
             end
