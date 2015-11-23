@@ -1,3 +1,18 @@
+# Changes in 0.1.5
+
+* Fixes bug in ```return_array: ``` option for ```Velocify::Lead.add```
+* Adds new feature for retrieving all reports
+
+``` ruby
+Velocify::Report.find_all
+```
+
+* Adds new feature for retrieving the results of a report
+
+``` ruby
+Velocify::Report.find_results id: 89
+```
+
 # Changes in 0.1.4
 
 * ```Velocify::Lead.add``` now works:
