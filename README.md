@@ -25,6 +25,15 @@ Or install it yourself as:
 Before getting started, you must export two environment variables: ```VELOCIFY_USERNAME``` and ```VELOCIFY_PASSWORD```.
 This gem uses Dotenv, so you can add these variables to your ```.env``` file in the root folder of your project.
 
+You can also programmatically configure the username and password:
+
+``` ruby
+Velocify.configure do |config|
+  config.username = "myusername"
+  config.password = "mypassword"
+end
+```
+
 ``` ruby
 require 'velocify'
 

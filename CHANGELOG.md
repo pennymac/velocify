@@ -1,3 +1,14 @@
+# Changes in 0.1.6
+
+* Supports programmatic configuration of Velocify credentials:
+
+``` ruby
+Velocify.configure do |config|
+  config.username = "dummy"
+  config.password = "pass"
+end
+```
+
 # Changes in 0.1.5
 
 * Fixes bug in ```return_array: ``` option for ```Velocify::Lead.add```
