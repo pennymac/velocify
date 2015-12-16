@@ -110,11 +110,7 @@ module Velocify
     end
         
     module ModelHelpers
-      attr :username, :password
-
       def authenticate!
-        @username = ENV['VELOCIFY_USERNAME']
-        @password = ENV['VELOCIFY_PASSWORD']
         valid_credentials?
       end
 
@@ -125,14 +121,14 @@ module Velocify
       private
       
       def verify_credentials!
-        if @username.nil? || @password.nil?
+        if Velocify.config.username.nil? || Velocify.config.password.nil?
           raise Velocify::AuthenticationException, "You must export your credentials to the environment"
         end
       end
 
       def valid_credentials?
-        return false if @username.nil? || @password.nil?
-        !@username.empty? && !@password.empty?
+        return false if Velocify.config.username.nil? || Velocify.config.password.nil?
+        !Velocify.config.username.empty? && !Velocify.config.password.empty?
       end
 
       def request destruct: false, &block
@@ -140,7 +136,7 @@ module Velocify
           request_builder = RequestBuilder.new
           request_builder.instance_eval(&block)
           request = request_builder.build
-          client = Client.new request, username: @username, password: @password
+          client = Client.new request, username: Velocify.config.username, password: Velocify.config.password
 
           if destruct || request.destruct_response?
             result = client.call
