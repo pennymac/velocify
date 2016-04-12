@@ -1,3 +1,14 @@
+# Changes in 0.1.7
+
+* Supports adding filter items to the template_values option when retrieving report results
+
+```
+require 'ostruct'
+
+item = OpenStruct.new field_title: 'Last Status Change Date', value: '4/12/2016 12:00:00'
+Velocify::Report.find_results report_id: 123, template_values: [ item ]
+```
+
 # Changes in 0.1.6
 
 * Supports programmatic configuration of Velocify credentials:
