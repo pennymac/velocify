@@ -37,5 +37,4 @@ require "velocify/status"
 require "velocify/report"
 
 require "velocify/response_reader"
-require "velocify/message_payload"
-require "velocify/add_leads_payload"
+require "velocify/payload"

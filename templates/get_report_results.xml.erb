@@ -1,0 +1,18 @@
+<env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="https://service.leads360.com">
+    <env:Body>
+	<ser:GetReportResults>
+	    <ser:username><%= @credentials[:username] %></ser:username>
+	    <ser:password><%= @credentials[:password] %></ser:password>
+	    <ser:reportId><%= @report_id %></ser:reportId>
+            <% unless @filter_items.empty? %>
+	    <ser:templateValues>
+		<FilterItems>
+		    <% @filter_items.each do |item| %>
+                        <FilterItem FieldTitle="<%= item.field_title %>"><%= item.value %></FilterItem>
+		    <% end %>
+		</FilterItems>
+	    </ser:templateValues>
+            <% end %>
+	</ser:GetReportResults>
+    </env:Body>
+</env:Envelope>
