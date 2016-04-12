@@ -13,3 +13,4 @@
 .ruby-version
 .rbenv-gemsets
 *.swp
+.gems
