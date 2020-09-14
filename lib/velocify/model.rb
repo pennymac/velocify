@@ -4,7 +4,7 @@ module Velocify
       WSDL = 'http://service.leads360.com/ClientService.asmx?WSDL'
 
       attr :request, :soap_client, :username, :password
-      
+
       def initialize request, username: nil, password: nil
         @request = request
         @username = username
@@ -45,7 +45,7 @@ module Velocify
       attr_writer :payload, :requires_auth, :destruct_response
       attr_accessor :transform
       attr_accessor :operation
-      
+
       def initialize
         @destruct_response = false
         @requires_auth = false
@@ -66,10 +66,10 @@ module Velocify
       def destruct_response? ; @destruct_response ; end
       def requires_auth?     ; @requires_auth     ; end
     end
-    
+
     class RequestBuilder
       include RequestHelpers
-      
+
       def initialize
         @destruct = false
       end
@@ -104,11 +104,11 @@ module Velocify
           req.requires_auth = @authenticate
           req.transform = @transform || -> (resp) { resp }
           req.operation = @operation
-          req.destruct_response = @destruct          
+          req.destruct_response = @destruct
         end
       end
     end
-        
+
     module ModelHelpers
       def authenticate!
         valid_credentials?
@@ -119,7 +119,7 @@ module Velocify
       end
 
       private
-      
+
       def verify_credentials!
         if Velocify.config.username.nil? || Velocify.config.password.nil?
           raise Velocify::AuthenticationException, "You must export your credentials to the environment"
@@ -159,7 +159,7 @@ module Velocify
         end
       end
     end
-    
+
     def self.included mod
       mod.extend ModelHelpers
       mod.authenticate!

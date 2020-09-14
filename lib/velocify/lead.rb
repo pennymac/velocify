@@ -43,7 +43,7 @@ module Velocify
           end
         end
       end
-      
+
       # Retrieves all leads
       #
       # @param from [String] The start date
@@ -121,7 +121,7 @@ module Velocify
       #
       def find_by_id id, destruct: false, return_array: false
         verify_credentials!
-        
+
         request do
           destruct_response? destruct
           operation :get_lead
@@ -136,10 +136,10 @@ module Velocify
           end
         end
       end
-      
+
       def find_last_created destruct: false, return_array: false
         verify_credentials!
-        
+
         request do
           destruct_response? destruct
           operation :get_last_created_lead
@@ -156,7 +156,7 @@ module Velocify
 
       def find_last_modified destruct: false, return_array: false
         verify_credentials!
-        
+
         request do
           destruct_response? destruct
           operation :get_last_modified_lead
@@ -199,9 +199,9 @@ module Velocify
       # @param status_id [String] The id of the status
       # @return [Hash] The response containing the updated lead
       #
-      def update_status lead_id:, status_id:, destruct: false, return_array: false
+      def update_status lead_id, status_id, destruct: false, return_array: false
         verify_credentials!
-        
+
         request do
           destruct_response? destruct
           operation :modify_lead_status
@@ -224,7 +224,7 @@ module Velocify
       # @param new_value [String] The new value of the field
       # @return [Hash] The response containing the updated lead
       #
-      def update_field lead_id:, field_id:, new_value:, destruct: false, return_array: false
+      def update_field lead_id, field_id, new_value, destruct: false, return_array: false
         verify_credentials!
       
         request do
