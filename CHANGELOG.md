@@ -1,3 +1,7 @@
+# Changes in 0.1.8
+
+* Fixes parameter definitions in the ```update_status``` and ```update_field``` methods
+
 # Changes in 0.1.7
 
 * Supports adding filter items to the template_values option when retrieving report results
@@ -71,4 +75,3 @@ leads = Velocify::Lead.find_by_email 'hi@example.org', return_array: true
 
 * ```Velocify::Lead.find_all``` by default returns a response like so ```{leads=>{lead=> ... }```
   instead of ```{get_leads_response=>{get_leads_result=>{leads=>lead=> ... }```.
-
