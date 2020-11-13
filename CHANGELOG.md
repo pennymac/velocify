@@ -1,3 +1,7 @@
+# Changes in 0.1.9
+
+* Adding lead method ```update_campaign``` to support the ```modify_lead_campaign``` operation
+
 # Changes in 0.1.8
 
 * Fixes parameter definitions in the ```update_status``` and ```update_field``` methods

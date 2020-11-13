@@ -189,6 +189,30 @@ module Velocify
         end
       end
 
+      # Updates the campaign of a lead.
+      #
+      # @param lead_id [String] The id of the lead
+      # @param status_id [String] The id of the status
+      # @return [Hash] The response containing the updated lead
+      #
+      def update_campaign lead_id, campaign_id, destruct: false, return_array: false
+        verify_credentials!
+
+        request do
+          destruct_response? destruct
+          operation :modify_lead_campaign
+          authenticate? true
+          message lead_id: lead_id, campaign_id: campaign_id
+          transform do |resp|
+            if return_array
+              arrayify resp[:leads][:lead]
+            else
+              resp
+            end
+          end
+        end
+      end
+
       # Updates the status of a lead.
       #
       # Use the `Velocify::Status.find_all` method to retrieve the id of the status
@@ -226,7 +250,7 @@ module Velocify
       #
       def update_field lead_id, field_id, new_value, destruct: false, return_array: false
         verify_credentials!
-      
+
         request do
           destruct_response? destruct
           operation :modify_lead_field
