@@ -1,3 +1,7 @@
+# Changes in 0.1.10
+
+* Adding lead method ```update_agent``` to support the ```modify_lead_agent``` operation
+
 # Changes in 0.1.9
 
 * Adding lead method ```update_campaign``` to support the ```modify_lead_campaign``` operation

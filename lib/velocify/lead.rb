@@ -213,6 +213,30 @@ module Velocify
         end
       end
 
+      # Updates the agent of a lead.
+      #
+      # @param lead_id [String] The id of the lead
+      # @param agent_id [String] The id of the agent
+      # @return [Hash] The response containing the updated lead
+      #
+      def update_agent lead_id, agent_id, destruct: false, return_array: false
+        verify_credentials!
+
+        request do
+          destruct_response? destruct
+          operation :modify_lead_agent
+          authenticate? true
+          message lead_id: lead_id, agent_id: agent_id
+          transform do |resp|
+            if return_array
+              arrayify resp[:leads][:lead]
+            else
+              resp
+            end
+          end
+        end
+      end
+
       # Updates the status of a lead.
       #
       # Use the `Velocify::Status.find_all` method to retrieve the id of the status
