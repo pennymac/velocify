@@ -6,8 +6,8 @@ require 'velocify/version'
 Gem::Specification.new do |spec|
   spec.name          = "velocify"
   spec.version       = Velocify::VERSION
-  spec.authors       = ["Daniel Dyba"]
-  spec.email         = ["daniel.dyba@gmail.com"]
+  spec.authors       = ["Daniel Dyba", "Jason Roberts"]
+  spec.email         = ["daniel.dyba@gmail.com", "jrob00@gmail.com"]
 
   spec.summary       = %q{A library to communicate with Velocify's API.}
   spec.description   = %q{A library to communicate with Velocify's API.}
